@@ -1,6 +1,6 @@
 {
   "name": "eureka-widget-model-relations-list",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A widget to display a relation of Eureka's models",
   "directories": {
     "doc": "doc",

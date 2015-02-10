@@ -1,7 +1,7 @@
 {
   "name": "eureka-widget-model-relations-list",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "A widget to display a relation of Eureka's models",
   "directories": {
     "doc": "doc",
     "test": "tests"

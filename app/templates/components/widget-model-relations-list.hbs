@@ -1,0 +1,11 @@
+<fieldset><legend>{{label}}</legend>
+{{#if relations.isPending}}
+    loading...
+{{else}}
+    <ul>
+        {{#each relation in relations}}
+            <li>{{#link-to relation.meta.modelIndexEmberPath relation._id}}{{relation.title}}{{/link-to}}</li>
+        {{/each}}
+    </ul>
+{{/if}}
+</fieldset>

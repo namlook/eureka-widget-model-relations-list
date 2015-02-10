@@ -1,6 +1,27 @@
 # Eureka-widget-model-relations-list
 
-This README outlines the details of collaborating on this Ember addon.
+A widget to display a relation of Eureka's models. Usage:
+
+
+    {
+        BlogPost: {
+            views: {
+                model: {
+                    widgets: [
+                        {
+                            type: 'model-relations-list',
+                            label: "related comments",
+                            modelType: 'Comment',               // the relation model type
+                            query: '{"blogPost._id": "${_id}"}' // "${_id}" is the id of the model (from the route)
+                            limit: 10                           // query option
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+
 
 ## Installation
 

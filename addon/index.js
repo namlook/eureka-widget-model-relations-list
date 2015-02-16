@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import CollectionWidget from 'ember-eureka/model-widget';
+import WidgetCollection from 'ember-eureka/widget-collection';
 import isEmpty from 'ember-eureka/utils/is-empty';
 
-export default CollectionWidget.extend({
+export default WidgetCollection.extend({
 
     model: Ember.computed.alias('routeModel'),
     db: Ember.computed.alias('modelStore.db'),
@@ -32,7 +32,6 @@ export default CollectionWidget.extend({
         var query = this.get('query');
         var queryOptions = this.get('queryOptions');
         Ember.setProperties(query, queryOptions);
-        console.log('>>>', query);
         return db[relationModelType].find(query);
     }.property('query'),
 

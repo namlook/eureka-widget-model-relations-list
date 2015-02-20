@@ -11,7 +11,6 @@ export default WidgetCollection.extend({
     label: Ember.computed.alias('config.label'),
     queryTemplate: Ember.computed.alias('config.query'),
     relationModelType: Ember.computed.alias('config.modelType'),
-    limit: Ember.computed.alias('config.limit'),
 
 
     _checkRequiredParameters: function() {
@@ -30,13 +29,31 @@ export default WidgetCollection.extend({
         var db = this.get('db');
         var relationModelType = this.get('relationModelType');
         var query = this.get('query');
-        var queryOptions = this.get('queryOptions');
-        Ember.setProperties(query, queryOptions);
         return db[relationModelType].find(query);
-    }.property('query'),
+    }.property('query', 'queryOptions'),
 
 
-    /** build the query from the template
+    /** build the collection model from relations
+     */
+    relationsRouteModel: function() {
+        var relationModelType = this.get('relationModelType');
+        var relationModelMeta = this.get('db.'+relationModelType+'.modelMeta');
+        var query = this.get('query');
+        return Ember.Object.create({
+            meta: relationModelMeta,
+            query: query
+        });
+    }.property('relationModelType', 'db', 'query'),
+
+
+    relationsWidgetConfig: function() {
+        return Ember.Object.create({
+            type: 'collection-display',
+            label: this.get('label')
+        });
+    }.property('label'),
+
+    /** build the query from the template and its options
      *  passed in the widget's configuration (queryTemplate)
      */
     query: function() {
@@ -59,16 +76,24 @@ export default WidgetCollection.extend({
             match = re.exec(queryTemplate);
         }
 
-        return JSON.parse(query);
-    }.property('queryTemplate', 'model._id'),
+        query = JSON.parse(query);
+
+        // update the query with options
+        Ember.setProperties(query, this.get('queryOptions'));
+
+        return query;
+    }.property('queryTemplate', 'model._id', 'queryOptions'),
 
 
     queryOptions: function() {
-        var options = Ember.Object.create();
-        var limit = this.get('limit');
-        if (limit !== undefined) {
-            options.set('_limit', limit);
+        var queryOptions = this.get('config.queryOptions');
+        var results = {};
+        if (queryOptions) {
+            Ember.keys(queryOptions).forEach(function(option) {
+                results['_'+option] = queryOptions[option];
+            });
         }
-        return options;
-    }.property('limit'),
+        return results;
+    }.property('config.queryOptions')
+
 });

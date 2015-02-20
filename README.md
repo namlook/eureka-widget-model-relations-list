@@ -10,10 +10,21 @@ A widget to display a relation of Eureka's models. Usage:
                     widgets: [
                         {
                             type: 'model-relations-list',
-                            label: "related comments",
-                            modelType: 'Comment',               // the relation model type
-                            query: '{"blogPost._id": "${_id}"}' // "${_id}" is the id of the model (from the route)
-                            limit: 10                           // query option
+
+                            // the relation model type
+                            modelType: 'Comment',
+
+                            // query on the "comment" resource
+                            query: '{"blogPost._id": "${_id}"}', // "${_id}" is the id of the model (from the route)
+
+                            // query option
+                            queryOptions: {
+                                limit: 10
+                            },
+
+                            // the header of the panel
+                            header: "related comments"
+
                         }
                     ]
                 }

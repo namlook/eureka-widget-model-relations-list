@@ -1,14 +1,1 @@
-<div class="panel panel-default">
-    <div class="panel-heading">{{label}}</div>
-    <div class="panel-body">
-        {{#if relations.isPending}}
-            loading...
-        {{else}}
-            <ul>
-                {{#each relation in relations}}
-                    <li>{{#link-to relation.meta.modelIndexEmberPath relation._id}}{{relation.title}}{{/link-to}}</li>
-                {{/each}}
-            </ul>
-        {{/if}}
-    </div>
-</div>
+{{partial "eureka-widget-model-relation-list"}}

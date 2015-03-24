@@ -11,8 +11,8 @@ A widget to display a relation of Eureka's models. Usage:
                         {
                             type: 'model-relations-list',
 
-                            // the relation model type
-                            modelType: 'Comment',
+                            // the related resource
+                            resource: 'Comment',
 
                             // query on the "comment" resource
                             query: '{"blogPost._id": "${_id}"}', // "${_id}" is the id of the model (from the route)
@@ -22,9 +22,12 @@ A widget to display a relation of Eureka's models. Usage:
                                 limit: 10
                             },
 
-                            // the header of the panel
-                            header: "related comments"
-
+                            // the widget which will display the collection
+                            widget: {
+                                type: 'collection-display'
+                                // the header of the panel
+                               label: "related comments"
+                            }
                         }
                     ]
                 }

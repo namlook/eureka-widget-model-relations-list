@@ -1,57 +1,57 @@
 import Ember from 'ember';
+import CollectionQuery from 'ember-eureka/collection-query';
 import WidgetCollection from 'ember-eureka/widget-collection';
-import isEmpty from 'ember-eureka/utils/is-empty';
 
 export default WidgetCollection.extend({
 
     model: Ember.computed.alias('routeModel'),
-    db: Ember.computed.alias('modelStore.db'),
+    db: Ember.computed.alias('store.db'),
 
     // widget's configuration
     label: Ember.computed.alias('config.label'),
     queryTemplate: Ember.computed.alias('config.query'),
-    relationModelType: Ember.computed.alias('config.modelType'),
-
+    relationResource: Ember.computed.alias('config.resource'),
 
     _checkRequiredParameters: function() {
-        var relationModelType = this.get('relationModelType');
+        var relationResource = this.get('relationResource');
         var queryTemplate = this.get('queryTemplate');
 
-        if (!relationModelType || !queryTemplate) {
-            console.error('model-relations-list widget requires the modelType and the query');
+        if (!relationResource || !queryTemplate) {
+            console.error('model-relations-list widget requires the resource and the query');
         }
     }.on('init'),
 
 
     /** fetch the relations from the query
      */
-    relations: function() {
-        var db = this.get('db');
-        var relationModelType = this.get('relationModelType');
-        var query = this.get('query');
-        return db[relationModelType].find(query);
-    }.property('query', 'queryOptions'),
+    // relations: function() {
+    //     var db = this.get('db');
+    //     var relationResource = this.get('relationResource');
+    //     var query = this.get('query');
+    //     return db[relationResource].find(query);
+    // }.property('query', 'queryOptions'),
 
 
     /** build the collection model from relations
      */
     relationsRouteModel: function() {
-        var relationModelType = this.get('relationModelType');
-        var relationModelMeta = this.get('db.'+relationModelType+'.modelMeta');
-        var query = this.get('query');
+        var relationResource = this.get('relationResource');
+        var relationModelMeta = this.get('db.'+relationResource+'.modelMeta');
+        var query = CollectionQuery.create();
+        query.set('raw', this.get('query'));
         return Ember.Object.create({
             meta: relationModelMeta,
             query: query
         });
-    }.property('relationModelType', 'db', 'query'),
+    }.property('relationResource', 'db', 'query'),
 
 
-    relationsWidgetConfig: function() {
-        return Ember.Object.create({
-            type: 'collection-display',
-            label: this.get('label')
-        });
-    }.property('label'),
+    // relationsWidgetConfig: function() {
+        // var widgetType = this.get('config.widget.type') || 'collection-display';
+        // var widgetConf = Ember.Object.create(this.get('config.widget'));
+        // widgetConf.set('type', 'widget-'+widgetType);
+        // return widgetConf;
+    // }.property('config.widget.type'),
 
     /** build the query from the template and its options
      *  passed in the widget's configuration (queryTemplate)
@@ -59,7 +59,7 @@ export default WidgetCollection.extend({
     query: function() {
         var queryTemplate = this.get('queryTemplate');
 
-        if (!queryTemplate || isEmpty(queryTemplate)) {
+        if (!queryTemplate) {
             return {};
         }
 
@@ -86,7 +86,7 @@ export default WidgetCollection.extend({
 
 
     queryOptions: function() {
-        var queryOptions = this.get('config.queryOptions');
+        var queryOptions = this.getWithDefault('config.queryOptions', {});
         var results = {};
         if (queryOptions) {
             Ember.keys(queryOptions).forEach(function(option) {

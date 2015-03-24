@@ -1,24 +1,7 @@
-{{widget-collection-display
+<div class="row">
+{{dynamic-widget
+    config=config.widget
     routeModel=relationsRouteModel
     currentController=currentController
-    config=relationsWidgetConfig
     toControllerAction="toControllerAction"}}
-
-
-{{!-- <div class="panel panel-default">
-    {{#if label}}
-        <div class="panel-heading">{{{label}}}</div>
-    {{/if}}
-
-    <div class="panel-body">
-        {{#if relations.isPending}}
-            loading...
-        {{else}}
-            <ul>
-                {{#each relation in relations}}
-                    <li>{{#link-to relation.meta.modelIndexEmberPath relation._id}}{{relation.title}}{{/link-to}}</li>
-                {{/each}}
-            </ul>
-        {{/if}}
-    </div>
-</div> --}}
+</div>

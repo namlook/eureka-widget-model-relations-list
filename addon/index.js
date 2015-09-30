@@ -34,7 +34,7 @@ export default WidgetCollection.extend({
 
     /** build the collection model from relations
      */
-    relationsRouteModel: function() {
+    relationsRouteModel: Ember.computed('relationResource', 'db', 'query', function() {
         var relationResource = this.get('relationResource');
         var relationModelMeta = this.get('db.'+relationResource+'.modelMeta');
         var query = CollectionQuery.create();
@@ -43,7 +43,7 @@ export default WidgetCollection.extend({
             meta: relationModelMeta,
             query: query
         });
-    }.property('relationResource', 'db', 'query'),
+    }),
 
 
     // relationsWidgetConfig: function() {
@@ -56,7 +56,7 @@ export default WidgetCollection.extend({
     /** build the query from the template and its options
      *  passed in the widget's configuration (queryTemplate)
      */
-    query: function() {
+    query: Ember.computed('queryTemplate', 'model._id', 'queryOptions', function() {
         var queryTemplate = this.get('queryTemplate');
 
         if (!queryTemplate) {
@@ -82,18 +82,18 @@ export default WidgetCollection.extend({
         Ember.setProperties(query, this.get('queryOptions'));
 
         return query;
-    }.property('queryTemplate', 'model._id', 'queryOptions'),
+    }),
 
 
-    queryOptions: function() {
+    queryOptions: Ember.computed('config.queryOptions', function() {
         var queryOptions = this.getWithDefault('config.queryOptions', {});
         var results = {};
         if (queryOptions) {
-            Ember.keys(queryOptions).forEach(function(option) {
+            Object.keys(queryOptions).forEach(function(option) {
                 results['_'+option] = queryOptions[option];
             });
         }
         return results;
-    }.property('config.queryOptions')
+    })
 
 });
